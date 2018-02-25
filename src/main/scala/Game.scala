@@ -1,12 +1,12 @@
 class Game {
 
   // TODO: Function which adds frames until 10 frames are up to represent game play
-  val frames = Vector[Frame]
-
+  val frames : Vector[Frame] = ???
 
   // todo, rethink this as a recursive function?
   def calculateSingleFrameScore(frames: Vector[Frame], currentFrame: Int ): Int = {
-    frames(currentFrame).match {
+    val frameToScore: Frame = frames(currentFrame)
+    frameToScore match {
       case OpenFrame(rolls) => rolls.first + rolls.second.getOrElse(0) // Think about modeling this better as an Open Frame will always have a second roll value
       case Spare(_) => 10 + frames(currentFrame + 1).rolls.first
       case Strike(_) =>

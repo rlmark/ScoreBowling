@@ -16,3 +16,4 @@ project/project
 /logs/
 /RUNNING_PID
 /checkpoints
+.idea/*
