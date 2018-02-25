@@ -1,4 +1,5 @@
-sealed trait Frame{
+sealed trait Frame {
+  // maybe needs an index?
   val rolls: Rolls
 }
 case class OpenFrame(rolls: Rolls) extends Frame

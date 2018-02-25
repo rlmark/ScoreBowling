@@ -1,12 +1,56 @@
+
+
 class Game() {
+  // TODO: Game mechanic for letting players take turns.
+  // TODO: Function which adds frames until 10 frames are done to represent game play
 
-  // TODO: Function which adds frames until 10 frames are up to represent game play
-  val frames : Vector[Frame] = Vector()
+  val players: Vector[Player] = Vector(new Player("1"), new Player("2")) // TODO: get from elsewhere
+  // TODO: Game mechanic for adding rolls to a frame.
+  val board: Map[Player, Vector[Frame]] = players.map( _ -> Vector()).toMap
 
+  def play(players: Vector[Player] ) = {
+    var currentFrame = 0
+    while (currentFrame < 10) {
+      players.map{ player =>
+        val createdFrame = Frame(player.takeTurn())
+        createdFrame +: board(player)// add the frame to that player's frame list
+      }
+      currentFrame += 1
+    }
+  }
+
+//  def whenToScore() = {
+//    var currentFrame = 0
+//    val player = new Player("Test")
+//    val board: Vector[Frame]  = Vector.empty
+//    while (currentFrame < 10) {
+//      // if at any point in time the frame look ahead is equal to the current frame,
+//      val createdFrame = Frame(player.takeTurn())
+//      createdFrame +: board // add the frame to that player's frame list
+//      createdFrame match {
+//        case f@OpenFrame(_) => calculateSingleFrameScore(board, currentFrame)
+//          currentFrame += 1
+//          // if the frame is a spare, look ahead one
+//        case f@Spare(_) =>
+//          currentFrame += 1
+//
+//      }
+//    }
+//  }
+
+  def shouldIScore(newFrame: Frame, existingFrames: Vector[Frame])= {
+    // add the new frame to the existing frames
+    // look at the last 3, if they are Strikes calculate
+    // look at the last 2, if the first is a Spare, calculate
+    // look at the last 2, if they are Strike, anything else, calculate
+    ???
+  }
+
+  // Note: If I use a stream of Frames, this maybe is less of an issue
   def calculateSingleFrameScore(frames: Vector[Frame], currentFrame: Int ): Int = {
     val frameToScore: Frame = frames(currentFrame)
     frameToScore match {
-      case OpenFrame(rolls) => rolls.first + rolls.second.getOrElse(0) // Think about modeling this better as an Open Frame will always have a second roll value
+      case OpenFrame(rolls) => rolls.first + rolls.second.getOrElse(0)
       case Spare(_) => 10 + frames(currentFrame + 1).rolls.first
       case Strike(_) =>
         val nextTurn = frames(currentFrame + 1).rolls
