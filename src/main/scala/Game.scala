@@ -1,9 +1,8 @@
-class Game {
+class Game() {
 
   // TODO: Function which adds frames until 10 frames are up to represent game play
-  val frames : Vector[Frame] = ???
+  val frames : Vector[Frame] = Vector()
 
-  // todo, rethink this as a recursive function?
   def calculateSingleFrameScore(frames: Vector[Frame], currentFrame: Int ): Int = {
     val frameToScore: Frame = frames(currentFrame)
     frameToScore match {
