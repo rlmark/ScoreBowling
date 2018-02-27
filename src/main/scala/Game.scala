@@ -1,7 +1,6 @@
 
 
-class Game() {
-  val players: Vector[Player] = Vector(new Player("1"), new Player("2")) // TODO: get from elsewhere
+class Game(players: Vector[Player] = Vector(new Player("1"), new Player("2"))) { // TODO: get elsewhere
 
   val board: Map[Player, Vector[Frame]] = players.map( _ -> Vector()).toMap
 // maybe put frame inside of player. board needs more information, like the calculated values
