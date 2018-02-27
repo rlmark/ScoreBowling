@@ -5,7 +5,8 @@ sealed trait Frame {
 case class OpenFrame(rolls: Rolls) extends Frame
 case class Spare(rolls: Rolls) extends Frame
 case class Strike(rolls: Rolls) extends Frame
-
+// Have frame have an optional score.
+// needs a way to hold on to say, 2 strikes while the 3rd comes in, not just simple some versus none.
 object Frame {
   def apply(rolls: Rolls):Frame = {
     rolls match {
