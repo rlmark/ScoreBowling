@@ -1,25 +1,25 @@
 sealed trait Frame {
-  // maybe needs an index?
-  val rolls: Rolls
-}
-case class OpenFrame(rolls: Rolls) extends Frame
-case class Spare(rolls: Rolls) extends Frame
-case class Strike(rolls: Rolls) extends Frame
-// Have frame have an optional score.
-// needs a way to hold on to say, 2 strikes while the 3rd comes in, not just simple some versus none.
-object Frame {
-  def apply(rolls: Rolls):Frame = {
-    rolls match {
-      case r@Rolls(first, Some(second)) if first + second < 10 => OpenFrame(r)
-      case r@Rolls(first, Some(second)) if first + second == 10 => Spare(r)
-      case r@Rolls(first, _ ) if first == 10 => Strike(r)
+  val ball1: Int
+  val ball2: Int
+  val ball3: Int
+  val isComplete: Boolean
+  val score: Option[Int]  // TODO use frameStatus
+
+  def calculateSingleFrameScore(frame: Frame, currentFrame: Int ): FrameStatus = {
+    frame match {
+      case OpenFrame(b1, b2, _, true, _) => Score(b1 + b2)
+      case Spare(b1, b2, b3, true, _) => Score(b1 + b2 + b3)
+      case Strike(b1, b2, b3, true, _) => Score(b1 + b2 + b3)
+      case f@_ => Pending(f)
     }
   }
 }
 
-case class Rolls(first: Int, second: Option[Int]) {
+case class OpenFrame(ball1: Int, ball2: Int, ball3:Int, isComplete: Boolean, score: Option[Int]) extends Frame
+case class Spare(ball1: Int, ball2: Int, ball3:Int, isComplete: Boolean, score: Option[Int]) extends Frame
+case class Strike(ball1: Int, ball2: Int, ball3:Int, isComplete: Boolean, score: Option[Int]) extends Frame
 
-  // The third roll is only relevant for the last (10th) frame if you get a Strike
-  val thirdRoll: Option[Int] = None
-}
 
+trait FrameStatus
+case class Pending(currentFrame: Frame) extends FrameStatus
+case class Score(scoreValue: Int) extends FrameStatus
