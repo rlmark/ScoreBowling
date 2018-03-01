@@ -24,11 +24,15 @@ object Frame {
     }
   }
 
-//  def updateFrame(turn: List[Int], previousFrame: Frame): Frame = {
-//    turn match {
-//      // weird case if you get two strikes in a row
-//      case firstBall :: Nil if firstBall == 10 && previousFrame.ball1 == 10 =>
-//        previousFrame.
-//    }
-//  }
+  def updateFrame(turn: List[Int], previousFrame: Frame): Frame = {
+    previousFrame match {
+      case Spare(bs, _, _) =>
+        Spare(bs :+ turn.head, complete = true, None) // if the previous frame was a spare, get the first roll from turn
+      case Strike(bs, _, _) if turn.lengthCompare(1) =>
+        Strike(bs ++ turn, complete = false, None) // Two strikes in a row
+      case Strike(bs, _, _) =>
+        val totalBalls = bs ++ turn
+        Strike(totalBalls.slice(0, 4), complete = true, None) // takes care of (10, 10, 4) and (10, 4, 2) case
+    }
+  }
 }
