@@ -8,7 +8,7 @@ case class Spare(balls: List[Int], complete: Boolean) extends Frame
 case class Strike(balls: List[Int], complete: Boolean) extends Frame
 
 object Frame {
-  def apply(turn: List[Int]): Frame = {
+  def apply(turn: List[Int]): Frame = {  // Can I shorten this case list.......?
     turn match {
       case t@firstBall :: secondBall :: Nil if firstBall + secondBall < 10 =>
         OpenFrame(t, complete = true )
@@ -27,11 +27,11 @@ object Frame {
     previousFrame match {
       case Spare(bs, _) =>
         Spare(bs :+ turn.head, complete = true) // if the previous frame was a spare, get the first roll from turn
-      case Strike(bs, _) if turn.lengthCompare(1) =>
+      case Strike(bs, _) if turn.length == 1 =>
         Strike(bs ++ turn, complete = false) // Two strikes in a row
       case Strike(bs, _) =>
         val totalBalls = bs ++ turn
-        Strike(totalBalls.slice(0, 4), complete = true) // takes care of (10, 10, 4) and (10, 4, 2) case
+        Strike(totalBalls.slice(0, 3), complete = true) // takes care of (10, 10, 4) and (10, 4, 2) case
       case noUpdateNeeded @ _ => noUpdateNeeded
     }
   }

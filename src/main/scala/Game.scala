@@ -17,14 +17,23 @@ class Game(players: Vector[Player] = Vector(new Player("1"), new Player("2"))) {
       }
     }
     board
+
+//    val t: Map[Player, Vector[FrameStatus]] = board.map {case (player, playersFrames) =>
+//      val turnTaken = player.takeTurn(8)
+//      val currentFrame = Frame(turnTaken)
+//      val currentFrameStatus = FrameStatus(currentFrame)
+//      val updatedPreviousFrames = updateBoard(turnTaken, playersFrames)
+//      val rewriteBoard: Vector[FrameStatus] = currentFrameStatus +: updatedPreviousFrames
+//      player -> rewriteBoard
+//    } // FUTURE WAY TO DO IT
   }
 
   // update frame method, raw list comes in, it calculatesTheScore and appends it to the FrameStatusList.
-  def updateBoard(turn: List[Int], playerFrameStatuses: Vector[FrameStatus]) = {
-      playerFrameStatuses.map {
-        case Pending(frameToUpdate) => FrameStatus(Frame.update(turn, frameToUpdate))
-        case finished@Score(_, _) => finished
-      }
+  def updateBoard(turn: List[Int], playerFrameStatuses: Vector[FrameStatus]): Vector[FrameStatus] = {
+    playerFrameStatuses.map {
+      case Pending(frameToUpdate) => FrameStatus(Frame.update(turn, frameToUpdate))
+      case finished@Score(_, _) => finished
+    }
   }
 
 
