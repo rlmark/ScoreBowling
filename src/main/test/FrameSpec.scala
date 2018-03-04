@@ -29,4 +29,39 @@ class FrameSpec extends FlatSpec with Matchers{
     val frame = Frame(lastTurn)
     frame shouldBe a[Strike]
   }
+
+  "update" should "not update an open frame given new turn" in {
+    val turn = List(1,4)
+    val previousFrame = OpenFrame(List(6,1), true)
+    val result = Frame.update(turn, previousFrame)
+    result shouldBe previousFrame
+  }
+
+  it should " update a spare frame given new turn" in {
+    val turn = List(1,7)
+    val previousFrame = Spare(List(6,4), false)
+    val result = Frame.update(turn, previousFrame)
+    result shouldBe Spare(List(6,4,1), true)
+  }
+
+  it should "update a strike frame given new open frame" in {
+    val turn = List(1,4)
+    val previousFrame = Strike(List(10), false)
+    val result = Frame.update(turn, previousFrame)
+    result shouldBe Strike(List(10,1,4), true)
+  }
+
+  it should "update a strike frame given new Strike" in {
+    val turn = List(10)
+    val previousFrame = Strike(List(10), false)
+    val result = Frame.update(turn, previousFrame)
+    result shouldBe Strike(List(10,10), false)
+  }
+
+  it should "update a double strike frame given new frame" in {
+    val turn = List(1,4)
+    val previousFrame = Strike(List(10, 10), false)
+    val result = Frame.update(turn, previousFrame)
+    result shouldBe Strike(List(10,10,1), true)
+  }
 }

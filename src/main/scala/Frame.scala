@@ -8,7 +8,7 @@ case class Spare(balls: List[Int], complete: Boolean) extends Frame
 case class Strike(balls: List[Int], complete: Boolean) extends Frame
 
 object Frame {
-  def apply(turn: List[Int]): Frame = {  // Can I shorten this case list.......?
+  def apply(turn: List[Int]): Frame = {
     turn match {
       case t@firstBall :: secondBall :: Nil if firstBall + secondBall < 10 =>
         OpenFrame(t, complete = true )
@@ -16,9 +16,9 @@ object Frame {
         Spare(t, complete = false)
       case t@firstBall :: Nil if firstBall == 10 =>
         Strike( t, complete = false)
-      case t@firstBall :: secondBall:: thirdBall :: Nil if firstBall == 10 =>
+      case t@firstBall :: _ :: _ :: Nil if firstBall == 10 =>
         Strike(t, complete = true)
-      case t@firstBall :: secondBall:: thirdBall :: Nil if firstBall + secondBall == 10 =>
+      case t@firstBall :: secondBall:: _ :: Nil if firstBall + secondBall == 10 =>
         Spare(t, complete = true)
     }
   }
