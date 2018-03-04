@@ -1,12 +1,19 @@
 import org.scalatest.{FlatSpec, Matchers}
 
 class GameSpec extends FlatSpec with Matchers {
+
+  "play" should "play a game" in {
+    val players = Vector(new Player("P1"), new Player("P2"))
+    val game = new Game(players)
+    println(game.play(players))
+
+  }
   "updateBoard" should "not update previous Open frames with new turn" in {
     val game = new Game()
     val turn = List (1,3)
     val previousFrames = Vector(
-      FrameStatus(Frame(List(4,5))),
-      FrameStatus(Frame(List(2,2)))
+      Status(Frame(List(4,5))),
+      Status(Frame(List(2,2)))
     )
 
     val result = game.updateBoard(turn, previousFrames)
@@ -19,8 +26,8 @@ class GameSpec extends FlatSpec with Matchers {
     val game = new Game()
     val turn = List (1,3)
     val previousFrames = Vector(
-      FrameStatus(Frame(List(4,5))),
-      FrameStatus(Frame(List(9,1)))
+      Status(Frame(List(4,5))),
+      Status(Frame(List(9,1)))
     )
 
     val result = game.updateBoard(turn, previousFrames)
@@ -36,8 +43,8 @@ class GameSpec extends FlatSpec with Matchers {
     val game = new Game()
     val turn = List (1,3)
     val previousFrames = Vector(
-      FrameStatus(Frame(List(4, 3))),
-      FrameStatus(Frame(List(10)))
+      Status(Frame(List(4, 3))),
+      Status(Frame(List(10)))
     )
 
     val result = game.updateBoard(turn, previousFrames)
@@ -53,7 +60,7 @@ class GameSpec extends FlatSpec with Matchers {
     val game = new Game()
     val turn = List (10)
     val previousFrames = Vector(
-      FrameStatus(Frame(List(10)))
+      Status(Frame(List(10)))
     )
 
     val result = game.updateBoard(turn, previousFrames)
@@ -68,8 +75,8 @@ class GameSpec extends FlatSpec with Matchers {
     val game = new Game()
     val turn = List(2,3)
     val previousFrames = Vector(
-      FrameStatus(Strike(List(10, 10), false)),
-      FrameStatus(Strike(List(10), false))
+      Status(Strike(List(10, 10), false)),
+      Status(Strike(List(10), false))
     )
 
     val result = game.updateBoard(turn, previousFrames)
