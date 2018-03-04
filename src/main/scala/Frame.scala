@@ -23,7 +23,7 @@ object Frame {
     }
   }
 
-  def updateFrame(turn: List[Int], previousFrame: Frame): Frame = {
+  def update(turn: List[Int], previousFrame: Frame): Frame = {
     previousFrame match {
       case Spare(bs, _) =>
         Spare(bs :+ turn.head, complete = true) // if the previous frame was a spare, get the first roll from turn
@@ -32,6 +32,7 @@ object Frame {
       case Strike(bs, _) =>
         val totalBalls = bs ++ turn
         Strike(totalBalls.slice(0, 4), complete = true) // takes care of (10, 10, 4) and (10, 4, 2) case
+      case noUpdateNeeded @ _ => noUpdateNeeded
     }
   }
 }
