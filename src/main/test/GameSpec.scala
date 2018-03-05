@@ -3,11 +3,11 @@ import org.scalatest.{FlatSpec, Matchers}
 class GameSpec extends FlatSpec with Matchers {
 
   "play" should "play a game" in {
-    val players = Vector(new Player("P1"), new Player("P2"))
+    val players = Vector(new Player("PLAYER_ONE"))
     val game = new Game(players)
-    println(game.play(players))
-
+    println(game.mutablePlay())
   }
+
   "updateBoard" should "not update previous Open frames with new turn" in {
     val game = new Game()
     val turn = List (1,3)
