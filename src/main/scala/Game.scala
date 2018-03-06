@@ -6,17 +6,24 @@ class Game(players: Vector[Player] = Vector(new Player("1"), new Player("2"))) {
   players foreach {p =>
     board += p -> Vector.empty
   }
-
   println("initializing empty board " + board)
+
   def mutablePlay(): mutable.Map[Player, Vector[Status]] = {
     for (i <- 1 to 10) {
       players.foreach { player =>
         val playerSpecificFrames = board(player)
+//        println("Value of board at start of turn " + playerSpecificFrames.mkString(" | "))
         val turnTaken = player.takeTurn(i)
+//        println("Current turn values " + turnTaken.mkString(", "))
         val currentFrameStatus = Status(Frame(turnTaken))
+//        println("Current Frame Status " + currentFrameStatus)
         val updatedPreviousFrames = updateBoard(turnTaken, playerSpecificFrames)
-        val rewriteBoard: Vector[Status] = currentFrameStatus +: updatedPreviousFrames
+//        println("previous frames updated with new turn " + updatedPreviousFrames.mkString(" | "))
+
+        val rewriteBoard: Vector[Status] = updatedPreviousFrames :+ currentFrameStatus
         board += (player -> rewriteBoard)
+
+        println(player.name + "||" + board(player).mkString(" | "))
       }
     }
     board
