@@ -18,13 +18,11 @@ class FrameSpec extends FlatSpec with Matchers{
     frame shouldBe a[Spare]
   }
   it should "create a valid last Spare frame" in {
-    // Need a method to create a frame from a turn
     val lastTurn = List(9, 1, 10)
     val frame = Frame(lastTurn)
     frame shouldBe a[Spare]
   }
   it should "create a valid last Strike frame" in {
-    // Need a method to create a frame from a turn
     val lastTurn = List(10, 10, 10)
     val frame = Frame(lastTurn)
     frame shouldBe a[Strike]

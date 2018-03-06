@@ -2,10 +2,14 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class GameSpec extends FlatSpec with Matchers {
 
-  "play" should "play a game" in {
-    val players = Vector(new Player("PLAYER_ONE"))
-    val game = new Game(players)
-    println(game.mutablePlay())
+  "play" should "never produce a game with any pending status at the end" in {
+    val players = Vector(new Player("PLAYER_ONE"), new Player("HALLO SO COOL"))
+
+    for(_ <- 1 to 25){
+      val game = new Game(players)
+      game.mutablePlay()
+      game.board.values.flatten.map(status => status shouldBe a[Score])
+    }
   }
 
   "updateBoard" should "not update previous Open frames with new turn" in {
