@@ -1,4 +1,5 @@
 import scala.collection.mutable
+import scala.util.{Failure, Success, Try}
 
 class Game(players: Vector[Player] = Vector(new Player("1"), new Player("2"))) { // TODO: get from elsewhere
 
@@ -26,6 +27,9 @@ class Game(players: Vector[Player] = Vector(new Player("1"), new Player("2"))) {
         println(player.name + "||" + board(player).mkString(" | "))
       }
     }
+    board.foreach(p =>
+     println(p._1 + scoreFinal(p._2).toString)
+    )
     board
   }
 
@@ -35,6 +39,15 @@ class Game(players: Vector[Player] = Vector(new Player("1"), new Player("2"))) {
       case Pending(frameToUpdate) => Status(Frame.update(turn, frameToUpdate))
       case finished@Score(_, _) => finished
     }
+  }
+
+  def scoreFinal(frames: Vector[Status]) = {
+    val tryScore: Seq[Int] = frames.map {
+      case f: Pending => throw new IllegalStateException("Something went wrong"))
+      case f: Score => f.scoreValue
+    }
+
+    tryScore.sum
   }
 
 
