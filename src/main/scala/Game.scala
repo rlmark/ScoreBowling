@@ -1,6 +1,6 @@
 import scala.collection.mutable
 
-class Game(players: Vector[Player] = Vector(new Player("1"), new Player("2"))) { // TODO: get from elsewhere
+class Game(players: Vector[Player]) {
 
   val board: scala.collection.mutable.Map[Player, Vector[Status]] = mutable.Map()
   players foreach {p =>
@@ -44,10 +44,5 @@ class Game(players: Vector[Player] = Vector(new Player("1"), new Player("2"))) {
 
     tryScore.sum
   }
-
-
-
-
-
 }
 

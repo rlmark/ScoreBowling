@@ -5,19 +5,17 @@ import org.scalatest.{FlatSpec, Matchers}
 class GameSpec extends FlatSpec with Matchers with MockitoSugar with PropertyChecks {
 
   "play" should "never produce a game with any pending status at the end" in {
-    val players = Vector(new Player("PLAYER_ONE"), new Player("HALLO SO COOL"))
-
-    val playerList: Gen[Vector[Player]] = for {
+    val players: Gen[Vector[Player]] = for {
       numberOfPlayers <- Gen.oneOf(1 to 4)
       name <- Gen.alphaStr
       samplePlayer = new Player(name)
       players <- Gen.listOfN[Player](numberOfPlayers, samplePlayer)
     } yield players.toVector
 
-    forAll(playerList){ samplePlayers =>
+    forAll(players){ samplePlayers =>
         val game = new Game(samplePlayers)
         game.mutablePlay()
-        game.board.values.flatten.toVector.foreach( status  => status  should be (a[Score]))
+        game.board.values.flatten.toVector.foreach( status  => status should be (a[Score]))
     }
   }
 
@@ -35,7 +33,7 @@ class GameSpec extends FlatSpec with Matchers with MockitoSugar with PropertyChe
     result should contain theSameElementsInOrderAs expectedStatuses
   }
 
-  it should " update previous Spare frame with new turn" in {
+  it should "update previous Spare frame with new turn" in {
     val game = new Game()
     val turn = List (1,3)
     val previousFrames = Vector(
