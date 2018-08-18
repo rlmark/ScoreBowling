@@ -1,14 +1,23 @@
+import org.scalacheck._
+import org.scalatest.mockito.MockitoSugar
+import org.scalatest.prop.PropertyChecks
 import org.scalatest.{FlatSpec, Matchers}
-
-class GameSpec extends FlatSpec with Matchers {
+class GameSpec extends FlatSpec with Matchers with MockitoSugar with PropertyChecks {
 
   "play" should "never produce a game with any pending status at the end" in {
     val players = Vector(new Player("PLAYER_ONE"), new Player("HALLO SO COOL"))
 
-    for(_ <- 1 to 25){
-      val game = new Game(players)
-      game.mutablePlay()
-      game.board.values.flatten.map(status => status shouldBe a[Score])
+    val playerList: Gen[Vector[Player]] = for {
+      numberOfPlayers <- Gen.oneOf(1 to 4)
+      name <- Gen.alphaStr
+      samplePlayer = new Player(name)
+      players <- Gen.listOfN[Player](numberOfPlayers, samplePlayer)
+    } yield players.toVector
+
+    forAll(playerList){ samplePlayers =>
+        val game = new Game(samplePlayers)
+        game.mutablePlay()
+        game.board.values.flatten.toVector.foreach( status  => status  should be (a[Score]))
     }
   }
 
