@@ -1,26 +1,20 @@
-import org.scalacheck._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{FlatSpec, Matchers}
 class GameSpec extends FlatSpec with Matchers with MockitoSugar with PropertyChecks {
 
-  "play" should "never produce a game with any pending status at the end" in {
-    val players: Gen[Vector[Player]] = for {
-      numberOfPlayers <- Gen.oneOf(1 to 4)
-      name <- Gen.alphaStr
-      samplePlayer = new Player(name)
-      players <- Gen.listOfN[Player](numberOfPlayers, samplePlayer)
-    } yield players.toVector
+import BowlingGenerators._
 
-    forAll(players){ samplePlayers =>
-        val game = new Game(samplePlayers)
+  "play" should "never produce a game with any pending status at the end" in {
+    forAll(samplePlayers, minSuccessful(50)){ players =>
+        val game = new Game(players)
         game.mutablePlay()
-        game.board.values.flatten.toVector.foreach( status  => status should be (a[Score]))
+        game.board.values.flatten.toVector.foreach( status  => status shouldBe a[Score])
     }
   }
 
   "updateBoard" should "not update previous Open frames with new turn" in {
-    val game = new Game()
+    val game = new Game(samplePlayers.sample.get)
     val turn = List (1,3)
     val previousFrames = Vector(
       Status(Frame(List(4,5))),
@@ -34,7 +28,7 @@ class GameSpec extends FlatSpec with Matchers with MockitoSugar with PropertyChe
   }
 
   it should "update previous Spare frame with new turn" in {
-    val game = new Game()
+    val game = new Game(samplePlayers.sample.get)
     val turn = List (1,3)
     val previousFrames = Vector(
       Status(Frame(List(4,5))),
@@ -51,7 +45,7 @@ class GameSpec extends FlatSpec with Matchers with MockitoSugar with PropertyChe
   }
 
   it should "update previous Strike frame with new turn" in {
-    val game = new Game()
+    val game = new Game(samplePlayers.sample.get)
     val turn = List (1,3)
     val previousFrames = Vector(
       Status(Frame(List(4, 3))),
@@ -68,7 +62,7 @@ class GameSpec extends FlatSpec with Matchers with MockitoSugar with PropertyChe
   }
 
   it should "update previous Strike frame with new Strike and keep status Pending" in {
-    val game = new Game()
+    val game = new Game(samplePlayers.sample.get)
     val turn = List (10)
     val previousFrames = Vector(
       Status(Frame(List(10)))
@@ -83,7 +77,7 @@ class GameSpec extends FlatSpec with Matchers with MockitoSugar with PropertyChe
   }
 
   it should "update 2 previous Strike frames" in {
-    val game = new Game()
+    val game = new Game(samplePlayers.sample.get)
     val turn = List(2,3)
     val previousFrames = Vector(
       Status(Strike(List(10, 10), false)),
